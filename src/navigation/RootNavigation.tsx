@@ -5,6 +5,7 @@ import Home from '../containers/Home';
 import Details from '../containers/Details';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Settings from '../containers/Settings';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Stack = createStackNavigator();
 
@@ -39,8 +40,28 @@ const Tab = createBottomTabNavigator();
 function MyTabs() {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Main" component={MainStack} />
-      <Tab.Screen name="Settings" component={SettingsStack} />
+      <Tab.Screen
+        name="Main"
+        component={MainStack}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsStack}
+        options={{
+          tabBarIcon: ({color, size}) => (
+            <MaterialCommunityIcons
+              name="account-settings"
+              color={color}
+              size={size}
+            />
+          ),
+        }}
+      />
     </Tab.Navigator>
   );
 }
