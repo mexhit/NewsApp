@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, ActivityIndicator, FlatList} from 'react-native';
+import {StyleSheet, FlatList, Platform, RefreshControl} from 'react-native';
 import {ListItem, Image, SearchBar} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import * as NewsService from '../api/news';
@@ -11,7 +11,7 @@ const Home = () => {
   const navigation = useNavigation();
   const [term, setTerm] = useState<string>('');
   const [loading, setLoading] = useState(false);
-  const debouncedTerm = useDebounce(term, 1000);
+  const debouncedTerm = useDebounce(term, 500);
 
   const setArticleList = () => {
     setLoading(true);
@@ -30,9 +30,9 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (term) {
+    if (debouncedTerm) {
       setLoading(true);
-      NewsService.searchArticles(term)
+      NewsService.searchArticles(debouncedTerm)
         .then(list => {
           setArticles(list);
         })
@@ -41,23 +41,25 @@ const Home = () => {
           setLoading(false);
         });
     }
-  }, [term, debouncedTerm]);
+  }, [debouncedTerm]);
 
   return (
     <>
       <SearchBar
-        platform={'default'}
+        platform={Platform.OS === 'ios' ? 'ios' : 'android'}
         onChangeText={setTerm}
         // @ts-ignore
         value={term}
         placeholder="Type Here..."
         onClear={setArticleList}
       />
-      {loading && <ActivityIndicator animating={loading} />}
       <FlatList
+        refreshControl={
+          <RefreshControl refreshing={loading} onRefresh={setArticleList} />
+        }
         showsVerticalScrollIndicator={false}
         data={articles}
-        keyExtractor={({title}) => title}
+        keyExtractor={({title}, index) => title + index}
         renderItem={({item}) => {
           return (
             <ListItem
@@ -84,7 +86,7 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: 15,
     fontFamily: 'System',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });
 
