@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import * as NewsService from '../api/news';
 import {Article} from '../types/Article';
 import useDebounce from '../hooks/useDebounce';
+import {useTranslation} from '../modules/language';
 
 const Home = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -12,6 +13,7 @@ const Home = () => {
   const [term, setTerm] = useState<string>('');
   const [loading, setLoading] = useState(false);
   const debouncedTerm = useDebounce(term, 500);
+  const {t} = useTranslation();
 
   const setArticleList = () => {
     setLoading(true);
@@ -50,7 +52,7 @@ const Home = () => {
         onChangeText={setTerm}
         // @ts-ignore
         value={term}
-        placeholder="Type Here..."
+        placeholder={t('typeHere')}
         onClear={setArticleList}
       />
       <FlatList
