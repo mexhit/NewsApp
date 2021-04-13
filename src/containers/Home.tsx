@@ -6,6 +6,7 @@ import * as NewsService from '../api/news';
 import {Article} from '../types/Article';
 import useDebounce from '../hooks/useDebounce';
 import {useTranslation} from '../modules/language';
+import {useTheme} from '../modules/theme';
 
 const Home = () => {
   const [articles, setArticles] = useState<Article[]>([]);
@@ -14,6 +15,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const debouncedTerm = useDebounce(term, 500);
   const {t} = useTranslation();
+  const {backgroundStyle, textStyle} = useTheme();
 
   const setArticleList = () => {
     setLoading(true);
@@ -48,6 +50,7 @@ const Home = () => {
   return (
     <>
       <SearchBar
+        containerStyle={backgroundStyle}
         platform={Platform.OS === 'ios' ? 'ios' : 'android'}
         onChangeText={setTerm}
         // @ts-ignore
@@ -65,13 +68,17 @@ const Home = () => {
         renderItem={({item}) => {
           return (
             <ListItem
+              style={backgroundStyle}
+              containerStyle={backgroundStyle}
               bottomDivider
               onPress={() => {
                 navigation.navigate('Details', {title: item.title});
               }}>
               <Image source={{uri: item.urlToImage}} style={styles.image} />
-              <ListItem.Content>
-                <ListItem.Title style={styles.textTitle} numberOfLines={3}>
+              <ListItem.Content style={backgroundStyle}>
+                <ListItem.Title
+                  style={[textStyle, styles.textTitle]}
+                  numberOfLines={3}>
                   {item.title}
                 </ListItem.Title>
               </ListItem.Content>

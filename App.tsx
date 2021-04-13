@@ -13,9 +13,14 @@ import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import {DefaultTheme, NavigationContainer} from '@react-navigation/native';
+import {
+  DefaultTheme,
+  NavigationContainer,
+  DarkTheme,
+} from '@react-navigation/native';
 import RootStack from './src/navigation/RootNavigation';
 import {LanguageProvider} from './src/context/LanguageContext';
+import {ModeProvider} from './src/context/ModeContext';
 
 const Theme = {
   ...DefaultTheme,
@@ -27,19 +32,39 @@ const Theme = {
 
 const App = () => {
   const [language, setLanguage] = useState('en');
+  const [theme, setTheme] = useState<'dark' | 'light'>('light');
+
   const backgroundStyle = {
     flex: 1,
   };
 
+  const toggleTheme = () => {
+    if (theme === 'dark') {
+      return setTheme('light');
+    }
+
+    setTheme('dark');
+  };
+
   return (
     <LanguageProvider value={[language, setLanguage]}>
-      <SafeAreaView style={backgroundStyle}>
-        <SafeAreaProvider style={backgroundStyle}>
-          <NavigationContainer theme={Theme}>
-            <RootStack />
-          </NavigationContainer>
-        </SafeAreaProvider>
-      </SafeAreaView>
+      <ModeProvider
+        value={{
+          theme,
+          toggleTheme,
+        }}>
+        <SafeAreaView
+          style={[
+            backgroundStyle,
+            {backgroundColor: theme === 'light' ? 'white' : 'rgb(18, 18, 18)'},
+          ]}>
+          <SafeAreaProvider style={backgroundStyle}>
+            <NavigationContainer theme={theme === 'light' ? Theme : DarkTheme}>
+              <RootStack />
+            </NavigationContainer>
+          </SafeAreaProvider>
+        </SafeAreaView>
+      </ModeProvider>
     </LanguageProvider>
   );
 };

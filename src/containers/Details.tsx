@@ -5,17 +5,19 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Text,
 } from 'react-native';
 import {Article} from '../types/Article';
-import {Text} from 'react-native-elements';
 import * as NewsService from '../api/news';
 import {useRoute} from '@react-navigation/native';
 import {DetailsScreenRouteProp} from '../navigation/RootNavigation';
+import useTheme from '../modules/theme';
 
 const Details = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(false);
   const route = useRoute<DetailsScreenRouteProp>();
+  const {textStyle} = useTheme();
 
   useEffect(() => {
     setLoading(true);
@@ -35,18 +37,22 @@ const Details = () => {
       {articles.length > 0 && (
         <>
           <Image source={{uri: articles[0].urlToImage}} style={styles.image} />
-          <View style={styles.infoContent}>
+          <View style={[styles.infoContent]}>
             <View style={styles.metadata}>
-              <Text style={styles.textTitle}>Author: </Text>
-              <Text>{articles[0].author}</Text>
+              <Text style={[textStyle, styles.textTitle]}>Author </Text>
+              <Text style={[textStyle]}>{articles[0].author}</Text>
             </View>
             <View style={styles.metadata}>
-              <Text style={styles.textTitle}>Date: </Text>
-              <Text>{new Date(articles[0].publishedAt).toDateString()}</Text>
+              <Text style={[textStyle, styles.textTitle]}>Published </Text>
+              <Text style={[textStyle]}>
+                {new Date(articles[0].publishedAt).toDateString()}
+              </Text>
             </View>
-            <Text style={styles.textTitle}>{articles[0].title}</Text>
+            <Text style={[textStyle, styles.textTitle]}>
+              {articles[0].title}
+            </Text>
             <View>
-              <Text style={[styles.textTitle, styles.content]}>
+              <Text style={[textStyle, styles.textTitle, styles.content]}>
                 {articles[0].content}
               </Text>
             </View>
@@ -74,9 +80,8 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   metadata: {
-    flexDirection: 'row',
     marginBottom: 20,
-    alignContent: 'center',
+    alignContent: 'flex-end',
     margin: 0,
   },
 });
