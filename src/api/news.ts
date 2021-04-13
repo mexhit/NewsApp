@@ -1,7 +1,8 @@
 import axios, {AxiosResponse} from 'axios';
 import {Article, ResponseObject} from '../types/Article';
 
-const API_KEY = '26e784918c83446fa83df0edaeb81d56';
+//const API_KEY = '26e784918c83446fa83df0edaeb81d56';
+const API_KEY = 'b8232ea75a7045d59decb6d5b57265a7';
 
 const BASE_URL = 'https://newsapi.org/v2';
 

@@ -21,7 +21,11 @@ export type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 function MainStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{headerShown: false}}
+      />
       <Stack.Screen name="Details" component={Details} />
     </Stack.Navigator>
   );
@@ -41,7 +45,7 @@ function MyTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen
-        name="Main"
+        name="News"
         component={MainStack}
         options={{
           tabBarIcon: ({color, size}) => (

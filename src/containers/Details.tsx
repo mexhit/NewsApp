@@ -60,9 +60,9 @@ const Details = () => {
 const styles = StyleSheet.create({
   image: {width: '100%', aspectRatio: 4 / 3, alignSelf: 'center'},
   textTitle: {
-    fontSize: 15,
+    fontSize: 18,
     fontFamily: 'System',
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
   infoContent: {
     paddingHorizontal: 20,
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: 20,
     alignContent: 'center',
+    margin: 0,
   },
 });
 
