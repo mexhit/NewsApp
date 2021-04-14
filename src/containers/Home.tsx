@@ -1,5 +1,11 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, FlatList, Platform, RefreshControl} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  FlatList,
+  Platform,
+  RefreshControl,
+  Linking,
+} from 'react-native';
 import {ListItem, Image, SearchBar} from 'react-native-elements';
 import {useNavigation} from '@react-navigation/native';
 import * as NewsService from '../api/news';
@@ -46,6 +52,32 @@ const Home = () => {
         });
     }
   }, [debouncedTerm]);
+
+  const navigateToDetails = useCallback(
+    (title: string) => {
+      navigation.navigate('Details', {title: title});
+    },
+    [navigation],
+  );
+
+  useEffect(() => {
+    Linking.addEventListener('url', params => {
+      const tittle = params.url.split('/').pop();
+      if (tittle) {
+        return navigateToDetails(tittle);
+      }
+    });
+  }, [navigateToDetails]);
+
+  useEffect(() => {
+    Linking.getInitialURL().then(url => {
+      const tittle = url?.split('/').pop();
+
+      if (tittle) {
+        return navigateToDetails(tittle);
+      }
+    });
+  }, [navigateToDetails]);
 
   return (
     <>
